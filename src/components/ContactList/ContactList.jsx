@@ -1,32 +1,18 @@
-import propTypes from 'prop-types';
-import css from './ContactList.module.css';
+import styles from './ContactList.module.css';
+import { Contact } from 'components/Contact/Contact';
+import { useSelector } from 'react-redux';
+import { selectVisibleItems } from 'redux/contacts/selectors';
 
-export const ContactList = ({ contacts, handleDelete }) => (
-  <div className={css.wraperContactList}>
-    <ul className={css.contactList}>
-      {contacts.map((contact, id) => (
-        <li key={id} className={css.contactListItem}>
-          {contact.name}: {contact.number}
-          <button
-            type="button"
-            className={css.contactListItemBtn}
-            onClick={() => handleDelete(contact.id)}
-          >
-            Delete
-          </button>
+export const ContactList = () => {
+  const visibleItems = useSelector(selectVisibleItems);
+
+  return (
+    <ul className={styles.list}>
+      {visibleItems.map(contact => (
+        <li key={contact.id} className={styles.item}>
+          <Contact contact={contact} />
         </li>
       ))}
     </ul>
-  </div>
-);
-
-ContactList.propTypes = {
-  contacts: propTypes.arrayOf(
-    propTypes.exact({
-      id: propTypes.string.isRequired,
-      name: propTypes.string.isRequired,
-      number: propTypes.string.isRequired,
-    })
-  ),
-  handleDelete: propTypes.func.isRequired,
+  );
 };

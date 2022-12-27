@@ -1,28 +1,26 @@
-import css from './Filter.module.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { getFilter } from 'redux/selectors';
-import { setFilter} from 'redux/actions'
-
+import styles from './Filter.module.css';
+import debounce from 'lodash.debounce';
+import { useDispatch } from 'react-redux';
+import { handleFilter } from 'redux/contacts/contactsSlice';
 
 export const Filter = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(getFilter);
 
-  const handleChange = e => {
-    dispatch(setFilter(e.target.value));
+  const handleChange = evt => {
+    dispatch(handleFilter(evt.target.value));
   };
 
+  const debouncedChange = debounce(handleChange, 200);
+
   return (
-    <div>
-      <label className={css.filterLabel}>Find contacts by Name </label>
+    <label className={styles.label}>
+      Find contacts by Name
       <input
-        className={css.filterName}
+        className={styles.input}
         type="text"
         name="filter"
-        placeholder="Enter filter"
-        value={filter}
-        onChange={handleChange}
+        onChange={debouncedChange}
       />
-    </div>
+    </label>
   );
 };
